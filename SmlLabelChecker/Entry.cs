@@ -12,6 +12,9 @@ namespace SmlLabelChecker
         public Entry()
         {
             InitializeComponent();
+
+            TestListData.Init();
+            
             var txtList = new TextBox[] { LabelStart, LabelEnd };
 
             // Placeholder 설정

@@ -153,50 +153,7 @@ namespace SmlLabelChecker
 
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (LabelSettingDataView.SelectedItem == null)
-                {
-                    MessageBox.Show("삭제할 항목을 선택해주세요.");
-                    return;
-                }
-
-                var selectedItem = (ListBoxItem)LabelSettingDataView.SelectedItem;
-                var selectedData = selectedItem.Data;
-
-                List<LabelSettingData> existingData = new List<LabelSettingData>();
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\SmlLabelChecker"))
-                {
-                    if (key != null)
-                    {
-                        string jsonData = key.GetValue("LabelSettingData")?.ToString();
-                        if (!string.IsNullOrEmpty(jsonData))
-                        {
-                            existingData = JsonConvert.DeserializeObject<List<LabelSettingData>>(jsonData);
-                        }
-                    }
-                }
-
-                var itemToRemove = existingData.Find(d =>
-                    d.HospitalCode == selectedData.HospitalCode &&
-                    d.TestCode == selectedData.TestCode &&
-                    d.SettingLabel == selectedData.SettingLabel);
-
-                if (itemToRemove != null)
-                {
-                    existingData.Remove(itemToRemove);
-                    SaveToRegistry(existingData);
-                    RefreshDataView();
-                }
-                else
-                {
-                    MessageBox.Show("삭제할 항목을 찾을 수 없습니다.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"삭제 중 오류 발생: {ex.Message}");
-            }
+           
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -223,6 +180,44 @@ namespace SmlLabelChecker
             }
 
             public override string ToString() => DisplayText;
+        }
+    
+        private void TestCodeTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (TestCodeTextBox.TextLength > 1)
+            {
+                resultContainer.Controls.Clear();
+                List<TestListData.Test> tests = TestListData.Search(TestCodeTextBox.Text);
+
+                if (tests.Count > 0)
+                {
+                    resultContainer.Visible = true;
+
+                    foreach (var test in tests)
+                    {
+                        SearchResultPanel panel = new SearchResultPanel();
+                        panel.Set(test.TestCode.ToString("D5"), test.TestName);
+                        resultContainer.Controls.Add(panel);
+                    }
+
+                    double blank = 7;
+                    int panelHeight = 46;
+                    double newHeight = panelHeight * tests.Count + blank * 2+ tests.Count - 1 * blank;
+                    int maxHeight = 260;
+                    resultContainer.Height = (int)Math.Min(newHeight, maxHeight);
+                }
+                else
+                {
+                    // 결과가 없으면 숨김
+                    resultContainer.Visible = false;
+                }
+            }
+            else
+            {
+                // 입력이 1자 이하면 숨김
+                resultContainer.Controls.Clear();
+                resultContainer.Visible = false;
+            }
         }
     }
 }
