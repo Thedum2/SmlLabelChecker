@@ -68,8 +68,8 @@ namespace SmlLabelChecker
                 else
                 {
                     // 유효하지 않은 키는 로그나 메시지로 처리 (WinForm 환경)
-                    MessageBox.Show($"유효하지 않은 테스트 코드: {kvp.Key}", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    continue; // 건너뛰기
+                    //MessageBox.Show($"유효하지 않은 테스트 코드: {kvp.Key}", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    continue;
                 }
             }
         }

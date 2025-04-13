@@ -48,6 +48,8 @@ namespace SmlLabelChecker
             this.Done = new System.Windows.Forms.Button();
             this.Next = new System.Windows.Forms.Button();
             this.Button_0 = new System.Windows.Forms.Button();
+            this.moveButton = new System.Windows.Forms.Button();
+            this.moveTextbox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // NumberLabel
@@ -62,7 +64,7 @@ namespace SmlLabelChecker
             // 
             // Previous
             // 
-            this.Previous.Location = new System.Drawing.Point(12, 193);
+            this.Previous.Location = new System.Drawing.Point(12, 227);
             this.Previous.Name = "Previous";
             this.Previous.Size = new System.Drawing.Size(126, 26);
             this.Previous.TabIndex = 7;
@@ -73,7 +75,7 @@ namespace SmlLabelChecker
             // RemainNumber
             // 
             this.RemainNumber.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.RemainNumber.Location = new System.Drawing.Point(150, 275);
+            this.RemainNumber.Location = new System.Drawing.Point(150, 309);
             this.RemainNumber.Name = "RemainNumber";
             this.RemainNumber.Size = new System.Drawing.Size(123, 20);
             this.RemainNumber.TabIndex = 8;
@@ -84,7 +86,7 @@ namespace SmlLabelChecker
             // 
             this.StartNumber.Font = new System.Drawing.Font("굴림", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.StartNumber.ForeColor = System.Drawing.Color.Red;
-            this.StartNumber.Location = new System.Drawing.Point(12, 257);
+            this.StartNumber.Location = new System.Drawing.Point(12, 291);
             this.StartNumber.Name = "StartNumber";
             this.StartNumber.Size = new System.Drawing.Size(113, 17);
             this.StartNumber.TabIndex = 9;
@@ -95,7 +97,7 @@ namespace SmlLabelChecker
             // 
             this.EndNumber.Font = new System.Drawing.Font("굴림", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.EndNumber.ForeColor = System.Drawing.Color.Blue;
-            this.EndNumber.Location = new System.Drawing.Point(12, 279);
+            this.EndNumber.Location = new System.Drawing.Point(12, 313);
             this.EndNumber.Name = "EndNumber";
             this.EndNumber.Size = new System.Drawing.Size(113, 17);
             this.EndNumber.TabIndex = 10;
@@ -115,7 +117,7 @@ namespace SmlLabelChecker
             // Button_1
             // 
             this.Button_1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.Button_1.Location = new System.Drawing.Point(144, 71);
+            this.Button_1.Location = new System.Drawing.Point(144, 105);
             this.Button_1.Name = "Button_1";
             this.Button_1.Size = new System.Drawing.Size(129, 24);
             this.Button_1.TabIndex = 12;
@@ -126,7 +128,7 @@ namespace SmlLabelChecker
             // Button_2
             // 
             this.Button_2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.Button_2.Location = new System.Drawing.Point(12, 101);
+            this.Button_2.Location = new System.Drawing.Point(12, 135);
             this.Button_2.Name = "Button_2";
             this.Button_2.Size = new System.Drawing.Size(126, 24);
             this.Button_2.TabIndex = 13;
@@ -137,7 +139,7 @@ namespace SmlLabelChecker
             // Button_4
             // 
             this.Button_4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.Button_4.Location = new System.Drawing.Point(12, 131);
+            this.Button_4.Location = new System.Drawing.Point(12, 165);
             this.Button_4.Name = "Button_4";
             this.Button_4.Size = new System.Drawing.Size(126, 24);
             this.Button_4.TabIndex = 15;
@@ -148,7 +150,7 @@ namespace SmlLabelChecker
             // Button_3
             // 
             this.Button_3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.Button_3.Location = new System.Drawing.Point(144, 101);
+            this.Button_3.Location = new System.Drawing.Point(144, 135);
             this.Button_3.Name = "Button_3";
             this.Button_3.Size = new System.Drawing.Size(129, 24);
             this.Button_3.TabIndex = 14;
@@ -160,7 +162,7 @@ namespace SmlLabelChecker
             // 
             this.Button_6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.Button_6.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.Button_6.Location = new System.Drawing.Point(12, 163);
+            this.Button_6.Location = new System.Drawing.Point(12, 197);
             this.Button_6.Name = "Button_6";
             this.Button_6.Size = new System.Drawing.Size(126, 24);
             this.Button_6.TabIndex = 17;
@@ -171,7 +173,7 @@ namespace SmlLabelChecker
             // Button_5
             // 
             this.Button_5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.Button_5.Location = new System.Drawing.Point(144, 131);
+            this.Button_5.Location = new System.Drawing.Point(144, 165);
             this.Button_5.Name = "Button_5";
             this.Button_5.Size = new System.Drawing.Size(129, 24);
             this.Button_5.TabIndex = 16;
@@ -182,7 +184,7 @@ namespace SmlLabelChecker
             // Button_7
             // 
             this.Button_7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Button_7.Location = new System.Drawing.Point(144, 161);
+            this.Button_7.Location = new System.Drawing.Point(144, 195);
             this.Button_7.Name = "Button_7";
             this.Button_7.Size = new System.Drawing.Size(129, 24);
             this.Button_7.TabIndex = 18;
@@ -194,7 +196,7 @@ namespace SmlLabelChecker
             // 
             this.Done.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.Done.ForeColor = System.Drawing.Color.White;
-            this.Done.Location = new System.Drawing.Point(12, 225);
+            this.Done.Location = new System.Drawing.Point(12, 259);
             this.Done.Name = "Done";
             this.Done.Size = new System.Drawing.Size(261, 26);
             this.Done.TabIndex = 20;
@@ -204,7 +206,7 @@ namespace SmlLabelChecker
             // 
             // Next
             // 
-            this.Next.Location = new System.Drawing.Point(144, 191);
+            this.Next.Location = new System.Drawing.Point(144, 225);
             this.Next.Name = "Next";
             this.Next.Size = new System.Drawing.Size(129, 26);
             this.Next.TabIndex = 21;
@@ -215,7 +217,7 @@ namespace SmlLabelChecker
             // Button_0
             // 
             this.Button_0.BackColor = System.Drawing.Color.Silver;
-            this.Button_0.Location = new System.Drawing.Point(12, 73);
+            this.Button_0.Location = new System.Drawing.Point(12, 107);
             this.Button_0.Name = "Button_0";
             this.Button_0.Size = new System.Drawing.Size(126, 24);
             this.Button_0.TabIndex = 22;
@@ -223,12 +225,35 @@ namespace SmlLabelChecker
             this.Button_0.UseVisualStyleBackColor = false;
             this.Button_0.Click += new System.EventHandler(this.Button_0_Click);
             // 
+            // moveButton
+            // 
+            this.moveButton.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.moveButton.FlatAppearance.BorderSize = 0;
+            this.moveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.moveButton.ForeColor = System.Drawing.Color.Transparent;
+            this.moveButton.Location = new System.Drawing.Point(224, 71);
+            this.moveButton.Name = "moveButton";
+            this.moveButton.Size = new System.Drawing.Size(49, 22);
+            this.moveButton.TabIndex = 24;
+            this.moveButton.Text = "이동";
+            this.moveButton.UseVisualStyleBackColor = false;
+            this.moveButton.Click += new System.EventHandler(this.moveButton_Click);
+            // 
+            // moveTextbox
+            // 
+            this.moveTextbox.Location = new System.Drawing.Point(150, 71);
+            this.moveTextbox.Name = "moveTextbox";
+            this.moveTextbox.Size = new System.Drawing.Size(68, 21);
+            this.moveTextbox.TabIndex = 23;
+            // 
             // LabelInput
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(285, 305);
+            this.ClientSize = new System.Drawing.Size(285, 343);
+            this.Controls.Add(this.moveButton);
+            this.Controls.Add(this.moveTextbox);
             this.Controls.Add(this.Button_0);
             this.Controls.Add(this.Next);
             this.Controls.Add(this.Done);
@@ -250,14 +275,16 @@ namespace SmlLabelChecker
             this.KeyPreview = true;
             this.Location = new System.Drawing.Point(15, 15);
             this.Name = "LabelInput";
-            this.Text = "라벨 검토 프로그램";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LabelInput_KeyDown);
             this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
-        private System.Windows.Forms.Button Button_0;
-
         private System.Windows.Forms.Button Next;
+        private System.Windows.Forms.Button Button_0;
+        private System.Windows.Forms.Button moveButton;
+        private System.Windows.Forms.TextBox moveTextbox;
+
         private System.Windows.Forms.Button Done;
 
         private System.Windows.Forms.Button Button_7;

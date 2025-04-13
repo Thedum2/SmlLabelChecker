@@ -11,8 +11,8 @@ namespace SmlLabelChecker
         public Setting()
         {
             InitializeComponent();
-            LabelSettingDrop.SelectedIndex = 0; // 드롭다운 디폴트 0번 인덱스
-            LoadFromRegistry(); // 폼 로드 시 기존 데이터 불러오기
+            LabelSettingDrop.SelectedIndex = 0;
+            LoadFromRegistry();
         }
 
         private void LoadFromRegistry()
@@ -23,11 +23,12 @@ namespace SmlLabelChecker
                 {
                     if (key != null)
                     {
-                        string jsonData = key.GetValue("LabelSettingData")?.ToString();
+                        string jsonData = key.GetValue("SettingData")?.ToString();
                         if (!string.IsNullOrEmpty(jsonData))
                         {
-                            List<LabelSettingData> dataList = JsonConvert.DeserializeObject<List<LabelSettingData>>(jsonData);
-                            RefreshDataView(dataList);
+                            SettingData data = JsonConvert.DeserializeObject<SettingData>(jsonData);
+                            RefreshDataView(data.Labels);
+                            UrineSetting.Checked = data.UrineSet; // 공통 UrineSet 로드
                         }
                     }
                 }
@@ -42,30 +43,16 @@ namespace SmlLabelChecker
             }
         }
 
-        private void SaveToRegistry(List<LabelSettingData> newData)
+        private void SaveToRegistry(SettingData settingData)
         {
             try
             {
-                List<LabelSettingData> existingData = new List<LabelSettingData>();
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\SmlLabelChecker"))
-                {
-                    if (key != null)
-                    {
-                        string jsonData = key.GetValue("LabelSettingData")?.ToString();
-                        if (!string.IsNullOrEmpty(jsonData))
-                        {
-                            existingData = JsonConvert.DeserializeObject<List<LabelSettingData>>(jsonData);
-                        }
-                    }
-                }
-
-                existingData.AddRange(newData);
-                string updatedJsonData = JsonConvert.SerializeObject(existingData);
+                string jsonData = JsonConvert.SerializeObject(settingData);
                 using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\SmlLabelChecker"))
                 {
                     if (key != null)
                     {
-                        key.SetValue("LabelSettingData", updatedJsonData, RegistryValueKind.String);
+                        key.SetValue("SettingData", jsonData, RegistryValueKind.String);
                     }
                 }
             }
@@ -87,18 +74,23 @@ namespace SmlLabelChecker
                 int testCode = Convert.ToInt32(TestCodeTextBox.Text);
                 int settingLabel = LabelSettingDrop.SelectedIndex == 0 ? 0 : LabelSettingDrop.SelectedIndex + 1;
 
-                List<LabelSettingData> newData = new List<LabelSettingData>
+                // 기존 데이터 로드
+                SettingData settingData = LoadSettingDataFromRegistry();
+                if (settingData == null)
                 {
-                    new LabelSettingData
-                    {
-                        HospitalCode = hospitalCode,
-                        TestCode = testCode,
-                        SettingLabel = settingLabel
-                    }
-                };
+                    settingData = new SettingData { UrineSet = UrineSetting.Checked, Labels = new List<LabelData>() };
+                }
 
-                SaveToRegistry(newData);
-                RefreshDataView();
+                // 새 항목 추가
+                settingData.Labels.Add(new LabelData
+                {
+                    HospitalCode = hospitalCode,
+                    TestCode = testCode,
+                    SettingLabel = settingLabel
+                });
+
+                SaveToRegistry(settingData);
+                RefreshDataView(settingData.Labels);
 
                 HospitalTextBox.Text = "";
                 TestCodeTextBox.Text = "";
@@ -114,34 +106,51 @@ namespace SmlLabelChecker
             }
         }
 
-        public void RefreshDataView(List<LabelSettingData> dataList = null)
+        private SettingData LoadSettingDataFromRegistry()
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\SmlLabelChecker"))
+            {
+                if (key != null)
+                {
+                    string jsonData = key.GetValue("SettingData")?.ToString();
+                    if (!string.IsNullOrEmpty(jsonData))
+                    {
+                        return JsonConvert.DeserializeObject<SettingData>(jsonData);
+                    }
+                }
+            }
+            return null;
+        }
+
+        public void RefreshDataView(List<LabelData> labels = null)
         {
             try
             {
-                if (dataList == null)
+                if (labels == null)
                 {
-                    using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\SmlLabelChecker"))
-                    {
-                        if (key != null)
-                        {
-                            string jsonData = key.GetValue("LabelSettingData")?.ToString();
-                            if (!string.IsNullOrEmpty(jsonData))
-                            {
-                                dataList = JsonConvert.DeserializeObject<List<LabelSettingData>>(jsonData);
-                            }
-                        }
-                    }
+                    SettingData data = LoadSettingDataFromRegistry();
+                    labels = data?.Labels;
                 }
 
-                LabelSettingDataView.Items.Clear(); // 기존 항목 제거
-                if (dataList != null && dataList.Count > 0)
+                LabelSettingDataView_Common.Items.Clear();
+                LabelSettingDataView_Etc.Items.Clear();
+                if (labels != null && labels.Count > 0)
                 {
-                    foreach (var data in dataList)
+                    foreach (var data in labels)
                     {
-                        string message = data.SettingLabel == 0
-                            ? $"{data.HospitalCode}병원에서는 {data.TestCode}코드의 검사를 진행 시, 라벨을 사용하지 않습니다."
+                        bool isCommon = data.HospitalCode == 0;
+                        string message = isCommon
+                            ? $"모든병원에서는 {data.TestCode}코드의 검사를 진행 시, 라벨을 사용하지 않습니다."
                             : $"{data.HospitalCode}병원에서는 {data.TestCode}코드의 검사를 진행 시, 라벨을 {data.SettingLabel}개를 사용합니다.";
-                        LabelSettingDataView.Items.Add(new ListBoxItem(data, message));
+
+                        if (isCommon)
+                        {
+                            LabelSettingDataView_Common.Items.Add(new ListBoxItem(data, message));
+                        }
+                        else
+                        {
+                            LabelSettingDataView_Etc.Items.Add(new ListBoxItem(data, message));
+                        }
                     }
                 }
             }
@@ -151,9 +160,66 @@ namespace SmlLabelChecker
             }
         }
 
+        private void DeleteButton_Etc_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (LabelSettingDataView_Etc.SelectedItem == null)
+                {
+                    MessageBox.Show("삭제할 항목을 선택해주세요.");
+                    return;
+                }
+
+                ListBoxItem selectedItem = (ListBoxItem)LabelSettingDataView_Etc.SelectedItem;
+                LabelData selectedData = selectedItem.Data;
+
+                SettingData settingData = LoadSettingDataFromRegistry();
+                if (settingData != null)
+                {
+                    settingData.Labels.RemoveAll(data =>
+                        data.HospitalCode == selectedData.HospitalCode &&
+                        data.TestCode == selectedData.TestCode &&
+                        data.SettingLabel == selectedData.SettingLabel);
+
+                    SaveToRegistry(settingData);
+                    RefreshDataView(settingData.Labels);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"삭제 중 오류 발생: {ex.Message}");
+            }
+        }
+
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-           
+            try
+            {
+                if (LabelSettingDataView_Common.SelectedItem == null)
+                {
+                    MessageBox.Show("삭제할 항목을 선택해주세요.");
+                    return;
+                }
+
+                ListBoxItem selectedItem = (ListBoxItem)LabelSettingDataView_Common.SelectedItem;
+                LabelData selectedData = selectedItem.Data;
+
+                SettingData settingData = LoadSettingDataFromRegistry();
+                if (settingData != null)
+                {
+                    settingData.Labels.RemoveAll(data =>
+                        data.HospitalCode == selectedData.HospitalCode &&
+                        data.TestCode == selectedData.TestCode &&
+                        data.SettingLabel == selectedData.SettingLabel);
+
+                    SaveToRegistry(settingData);
+                    RefreshDataView(settingData.Labels);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"삭제 중 오류 발생: {ex.Message}");
+            }
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -161,7 +227,14 @@ namespace SmlLabelChecker
             this.Close();
         }
 
-        public class LabelSettingData
+        // 새로운 데이터 클래스 정의
+        public class SettingData
+        {
+            public bool UrineSet { get; set; } // 공통 설정
+            public List<LabelData> Labels { get; set; } // 리스트로 관리
+        }
+
+        public class LabelData
         {
             public int HospitalCode { get; set; }
             public int TestCode { get; set; }
@@ -170,10 +243,10 @@ namespace SmlLabelChecker
 
         public class ListBoxItem
         {
-            public LabelSettingData Data { get; }
+            public LabelData Data { get; }
             public string DisplayText { get; }
 
-            public ListBoxItem(LabelSettingData data, string displayText)
+            public ListBoxItem(LabelData data, string displayText)
             {
                 Data = data;
                 DisplayText = displayText;
@@ -181,7 +254,13 @@ namespace SmlLabelChecker
 
             public override string ToString() => DisplayText;
         }
-    
+
+        private void SearchResultPanel_Click(int code)
+        {
+            TestCodeTextBox.Text = code.ToString();
+            resultContainer.Visible = false;
+        }
+
         private void TestCodeTextBox_TextChanged(object sender, EventArgs e)
         {
             if (TestCodeTextBox.TextLength > 1)
@@ -195,28 +274,60 @@ namespace SmlLabelChecker
 
                     foreach (var test in tests)
                     {
-                        SearchResultPanel panel = new SearchResultPanel();
-                        panel.Set(test.TestCode.ToString("D5"), test.TestName);
+                        SearchResultPanel panel = new SearchResultPanel(SearchResultPanel_Click);
+                        panel.Set(test.TestCode, test.TestName);
                         resultContainer.Controls.Add(panel);
                     }
 
-                    double blank = 7;
-                    int panelHeight = 46;
-                    double newHeight = panelHeight * tests.Count + blank * 2+ tests.Count - 1 * blank;
-                    int maxHeight = 260;
-                    resultContainer.Height = (int)Math.Min(newHeight, maxHeight);
+                    int calcCount = tests.Count > 5 ? 5 : tests.Count;
+                    resultContainer.Height = newHeight(calcCount);
                 }
                 else
                 {
-                    // 결과가 없으면 숨김
                     resultContainer.Visible = false;
                 }
             }
             else
             {
-                // 입력이 1자 이하면 숨김
                 resultContainer.Controls.Clear();
                 resultContainer.Visible = false;
+            }
+
+            int newHeight(int testCount)
+            {
+                int blank = 3;
+                int panelHeight = 46;
+                return (panelHeight + blank * 2) * testCount;
+            }
+        }
+
+        private void UrinSettingInfoButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "이 옵션을 활성화하면 동일한 Urine 검체로 접수된 경우에도,\n요일반 및 요침사 항목(70000, 70004, 70005, 70006, 77560, 77561, 77562, 77563, 70015, 77566),\n기타 Urine 항목,\nNmp(27541)이 각각 별도로 처리됩니다.",
+                "Urine 설정 정보",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        private void UrineSetting_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                SettingData settingData = LoadSettingDataFromRegistry();
+                if (settingData == null)
+                {
+                    settingData = new SettingData { UrineSet = UrineSetting.Checked, Labels = new List<LabelData>() };
+                }
+
+                settingData.UrineSet = UrineSetting.Checked;
+                SaveToRegistry(settingData);
+                RefreshDataView(settingData.Labels); // UI 갱신
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Urine 설정 저장 중 오류 발생: {ex.Message}");
             }
         }
     }

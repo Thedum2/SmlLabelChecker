@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Data;
 using System.Linq;
+using System.Windows.Forms;
 using ExcelDataReader;
 
 namespace SmlLabelChecker
@@ -50,16 +51,16 @@ namespace SmlLabelChecker
                     var table = result.Tables[0]; // 첫 번째 시트 사용
 
                     applyDate = table.Rows[1][0].ToString();
-
+                    
                     // 행 순회 (첫 번째 행은 헤더이므로 1부터 시작)
                     for (int rowIndex = 1; rowIndex < table.Rows.Count; rowIndex++)
                     {
                         var row = table.Rows[rowIndex];
-
+                        
                         // 접수번호 (B열, 인덱스 1)
                         if (!int.TryParse(row[1]?.ToString(), out int receptionNumber))
                             continue; // 접수번호가 유효하지 않으면 건너뜀
-
+                        
                         // 딕셔너리에 해당 접수번호가 없으면 새로 추가
                         if (!_receptionItems.ContainsKey(receptionNumber))
                         {
@@ -73,39 +74,29 @@ namespace SmlLabelChecker
                         var item = _receptionItems[receptionNumber];
 
                         // 병원 (T열, 인덱스 19)
-                        string hospital = row[19]?.ToString();
-                        if (!string.IsNullOrEmpty(hospital))
+                        string hospitalStringCode = row[3]?.ToString();
+                        string hospitalName = row[19]?.ToString();
+                        if (!string.IsNullOrEmpty(hospitalName) && int.TryParse(hospitalStringCode, out int hospitalCode))
                         {
-                            if (string.IsNullOrEmpty(item.Hospital))
-                                item.Hospital = hospital;
-                            else if (item.Hospital != hospital)
+                            item.Hospital = new Hospital()
                             {
-                                errorMessage =
-                                    $"접수번호 {receptionNumber}에 대해 병원 이름이 일치하지 않습니다: {item.Hospital} vs {hospital}";
-                                return false;
-                            }
+                                Code = hospitalCode,
+                                Name = hospitalName
+                            };
                         }
+
 
                         // 이름 (G열, 인덱스 6)
                         string name = row[6]?.ToString();
-                        if (!string.IsNullOrEmpty(name))
-                        {
-                            if (string.IsNullOrEmpty(item.Name))
-                                item.Name = name;
-                            else if (item.Name != name)
-                            {
-                                errorMessage = $"접수번호 {receptionNumber}에 대해 이름이 일치하지 않습니다: {item.Name} vs {name}";
-                                return false;
-                            }
-                        }
+                        item.Name = name;
 
                         // TestItem (U/V 열만 사용, 인덱스 20/21)
                         string testName = row[20]?.ToString(); // U열
                         string sampleName = row[21]?.ToString(); // V열
-                        int specimenCode = Convert.ToInt32(row[5]?.ToString()); // F열
+                        string specimenCode = row[5]?.ToString(); // F열
                         int testCode = Convert.ToInt32(row[4]?.ToString()); // E열
                         
-                        if (!string.IsNullOrEmpty(testName) && !string.IsNullOrEmpty(sampleName) && specimenCode > -1)
+                        if (!string.IsNullOrEmpty(testName) && !string.IsNullOrEmpty(sampleName) && !string.IsNullOrEmpty(specimenCode))
                         {
                             item.TestItem.Add(new ReceptionItem.Test
                             {
@@ -145,17 +136,23 @@ namespace SmlLabelChecker
             }
             catch (Exception ex)
             {
-                errorMessage = $"엑셀 파일 읽기 중 오류 발생: {ex.Message}";
+                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.StackTrace);
             }
 
             return true;
         }
     }
 
+    public class Hospital
+    {
+        public int Code;
+        public string Name;
+    }
     public class ReceptionItem
     {
         public int ReceptionNumber { get; set; }
-        public string Hospital { get; set; }
+        public Hospital Hospital { get; set; }
         public string Name { get; set; }
         public List<Test> TestItem { get; set; }
         public int ReceivedSampleCount { get; set; }
@@ -165,7 +162,7 @@ namespace SmlLabelChecker
             public string TestName { get; set; }
             public int TestCode { get; set; }
             public string SpecimenName { get; set; }
-            public int SpecimenCode { get; set; }
+            public string SpecimenCode { get; set; }
         }
     }
 }

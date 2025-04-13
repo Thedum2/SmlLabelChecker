@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SmlLabelChecker
 {
@@ -28,6 +29,14 @@ namespace SmlLabelChecker
         public static string FormatDateString((int year, int month, int day) dateTuple)
         {
             return $"접수일자: {dateTuple.year}/{dateTuple.month:D2}/{dateTuple.day:D2}";
+        }
+
+        public static string FormatEtcText(List<string> stringList)
+        {
+            if (stringList == null || stringList.Count == 0)
+                return string.Empty;
+
+            return string.Join("\n", stringList);
         }
     }
 }

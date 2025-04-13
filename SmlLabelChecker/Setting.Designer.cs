@@ -37,17 +37,20 @@ namespace SmlLabelChecker
             this.HospitalTextBox = new System.Windows.Forms.TextBox();
             this.CloseButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.DeleteButton = new System.Windows.Forms.Button();
+            this.DeleteButton_Common = new System.Windows.Forms.Button();
             this.LabelSettingDrop = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.SaveButton = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.LabelSettingDataView = new System.Windows.Forms.ListBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.LabelSettingDataView_Common = new System.Windows.Forms.ListBox();
+            this.LabelSettingDataView_Etc = new System.Windows.Forms.ListBox();
             this.label7 = new System.Windows.Forms.Label();
             this.TestCodeTextBox = new System.Windows.Forms.TextBox();
             this.resultContainer = new System.Windows.Forms.FlowLayoutPanel();
+            this.DeleteButton_Etc = new System.Windows.Forms.Button();
+            this.UrineSetting = new System.Windows.Forms.CheckBox();
+            this.UrinSettingInfoButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -100,19 +103,19 @@ namespace SmlLabelChecker
             this.label3.Text = "코드의 검사가 있을 시, 라벨을";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // DeleteButton
+            // DeleteButton_Common
             // 
-            this.DeleteButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.DeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.DeleteButton.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.DeleteButton.ForeColor = System.Drawing.Color.White;
-            this.DeleteButton.Location = new System.Drawing.Point(810, 102);
-            this.DeleteButton.Name = "DeleteButton";
-            this.DeleteButton.Size = new System.Drawing.Size(100, 23);
-            this.DeleteButton.TabIndex = 19;
-            this.DeleteButton.Text = "삭제";
-            this.DeleteButton.UseVisualStyleBackColor = false;
-            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            this.DeleteButton_Common.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.DeleteButton_Common.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeleteButton_Common.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.DeleteButton_Common.ForeColor = System.Drawing.Color.White;
+            this.DeleteButton_Common.Location = new System.Drawing.Point(810, 102);
+            this.DeleteButton_Common.Name = "DeleteButton_Common";
+            this.DeleteButton_Common.Size = new System.Drawing.Size(100, 23);
+            this.DeleteButton_Common.TabIndex = 19;
+            this.DeleteButton_Common.Text = "삭제";
+            this.DeleteButton_Common.UseVisualStyleBackColor = false;
+            this.DeleteButton_Common.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
             // LabelSettingDrop
             // 
@@ -170,23 +173,23 @@ namespace SmlLabelChecker
             this.label6.TabIndex = 25;
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // LabelSettingDataView
+            // LabelSettingDataView_Common
             // 
-            this.LabelSettingDataView.FormattingEnabled = true;
-            this.LabelSettingDataView.ItemHeight = 12;
-            this.LabelSettingDataView.Location = new System.Drawing.Point(12, 131);
-            this.LabelSettingDataView.Name = "LabelSettingDataView";
-            this.LabelSettingDataView.Size = new System.Drawing.Size(898, 112);
-            this.LabelSettingDataView.TabIndex = 26;
+            this.LabelSettingDataView_Common.FormattingEnabled = true;
+            this.LabelSettingDataView_Common.ItemHeight = 12;
+            this.LabelSettingDataView_Common.Location = new System.Drawing.Point(12, 131);
+            this.LabelSettingDataView_Common.Name = "LabelSettingDataView_Common";
+            this.LabelSettingDataView_Common.Size = new System.Drawing.Size(898, 112);
+            this.LabelSettingDataView_Common.TabIndex = 26;
             // 
-            // listBox1
+            // LabelSettingDataView_Etc
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(12, 277);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(898, 112);
-            this.listBox1.TabIndex = 28;
+            this.LabelSettingDataView_Etc.FormattingEnabled = true;
+            this.LabelSettingDataView_Etc.ItemHeight = 12;
+            this.LabelSettingDataView_Etc.Location = new System.Drawing.Point(12, 277);
+            this.LabelSettingDataView_Etc.Name = "LabelSettingDataView_Etc";
+            this.LabelSettingDataView_Etc.Size = new System.Drawing.Size(898, 112);
+            this.LabelSettingDataView_Etc.TabIndex = 28;
             // 
             // label7
             // 
@@ -213,11 +216,52 @@ namespace SmlLabelChecker
             // resultContainer
             // 
             this.resultContainer.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.resultContainer.CausesValidation = false;
             this.resultContainer.Location = new System.Drawing.Point(228, 89);
+            this.resultContainer.Margin = new System.Windows.Forms.Padding(0);
             this.resultContainer.Name = "resultContainer";
-            this.resultContainer.Size = new System.Drawing.Size(275, 313);
+            this.resultContainer.Size = new System.Drawing.Size(275, 102);
             this.resultContainer.TabIndex = 30;
             this.resultContainer.Visible = false;
+            // 
+            // DeleteButton_Etc
+            // 
+            this.DeleteButton_Etc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.DeleteButton_Etc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeleteButton_Etc.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.DeleteButton_Etc.ForeColor = System.Drawing.Color.White;
+            this.DeleteButton_Etc.Location = new System.Drawing.Point(810, 252);
+            this.DeleteButton_Etc.Name = "DeleteButton_Etc";
+            this.DeleteButton_Etc.Size = new System.Drawing.Size(100, 23);
+            this.DeleteButton_Etc.TabIndex = 31;
+            this.DeleteButton_Etc.Text = "삭제";
+            this.DeleteButton_Etc.UseVisualStyleBackColor = false;
+            this.DeleteButton_Etc.Click += new System.EventHandler(this.DeleteButton_Etc_Click);
+            // 
+            // UrineSetting
+            // 
+            this.UrineSetting.Location = new System.Drawing.Point(528, 99);
+            this.UrineSetting.Name = "UrineSetting";
+            this.UrineSetting.Size = new System.Drawing.Size(109, 23);
+            this.UrineSetting.TabIndex = 32;
+            this.UrineSetting.Text = "Urine 분리 처리";
+            this.UrineSetting.UseVisualStyleBackColor = true;
+            this.UrineSetting.CheckedChanged += new System.EventHandler(this.UrineSetting_CheckedChanged);
+            // 
+            // UrinSettingInfoButton
+            // 
+            this.UrinSettingInfoButton.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.UrinSettingInfoButton.FlatAppearance.BorderSize = 0;
+            this.UrinSettingInfoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.UrinSettingInfoButton.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.UrinSettingInfoButton.ForeColor = System.Drawing.Color.White;
+            this.UrinSettingInfoButton.Location = new System.Drawing.Point(633, 99);
+            this.UrinSettingInfoButton.Name = "UrinSettingInfoButton";
+            this.UrinSettingInfoButton.Size = new System.Drawing.Size(20, 20);
+            this.UrinSettingInfoButton.TabIndex = 33;
+            this.UrinSettingInfoButton.Text = "?";
+            this.UrinSettingInfoButton.UseVisualStyleBackColor = false;
+            this.UrinSettingInfoButton.Click += new System.EventHandler(this.UrinSettingInfoButton_Click);
             // 
             // Setting
             // 
@@ -225,16 +269,19 @@ namespace SmlLabelChecker
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(922, 405);
+            this.Controls.Add(this.UrinSettingInfoButton);
+            this.Controls.Add(this.UrineSetting);
+            this.Controls.Add(this.DeleteButton_Etc);
             this.Controls.Add(this.resultContainer);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.LabelSettingDataView_Etc);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.LabelSettingDataView);
+            this.Controls.Add(this.LabelSettingDataView_Common);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.LabelSettingDrop);
-            this.Controls.Add(this.DeleteButton);
+            this.Controls.Add(this.DeleteButton_Common);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.TestCodeTextBox);
             this.Controls.Add(this.CloseButton);
@@ -248,14 +295,20 @@ namespace SmlLabelChecker
             this.PerformLayout();
         }
 
+        private System.Windows.Forms.Button UrinSettingInfoButton;
+
+        private System.Windows.Forms.CheckBox UrineSetting;
+
+        private System.Windows.Forms.Button DeleteButton_Etc;
+
         private System.Windows.Forms.FlowLayoutPanel resultContainer;
 
         private System.Windows.Forms.TextBox TestCodeTextBox;
 
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox LabelSettingDataView_Etc;
         private System.Windows.Forms.Label label7;
 
-        private System.Windows.Forms.ListBox LabelSettingDataView;
+        private System.Windows.Forms.ListBox LabelSettingDataView_Common;
 
         private System.Windows.Forms.Label label6;
 
@@ -267,7 +320,7 @@ namespace SmlLabelChecker
 
         private System.Windows.Forms.ComboBox LabelSettingDrop;
 
-        private System.Windows.Forms.Button DeleteButton;
+        private System.Windows.Forms.Button DeleteButton_Common;
 
         private System.Windows.Forms.Label label3;
 

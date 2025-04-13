@@ -43,6 +43,7 @@ namespace SmlLabelChecker
             this.DateLabel = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.LabelResultView = new System.Windows.Forms.DataGridView();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.LabelResultView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -148,12 +149,12 @@ namespace SmlLabelChecker
             // 
             // label9
             // 
-            this.label9.Location = new System.Drawing.Point(886, 712);
+            this.label9.Location = new System.Drawing.Point(639, 712);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(320, 14);
+            this.label9.Size = new System.Drawing.Size(567, 31);
             this.label9.TabIndex = 13;
-            this.label9.Text = "성남지점 김성진 사원 제작";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.label9.Text = "문의사항 및 오류 문의는 asdf74591@gmail.com으로 전달주세요\r\n";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // LabelResultView
             // 
@@ -169,12 +170,22 @@ namespace SmlLabelChecker
             this.LabelResultView.Size = new System.Drawing.Size(1194, 635);
             this.LabelResultView.TabIndex = 11;
             // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(12, 712);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(152, 18);
+            this.label10.TabIndex = 14;
+            this.label10.Text = "성남지점 김성진 사원 제작";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // Result
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1218, 735);
+            this.ClientSize = new System.Drawing.Size(1218, 732);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.DateLabel);
             this.Controls.Add(this.LabelResultView);
@@ -196,6 +207,8 @@ namespace SmlLabelChecker
             ((System.ComponentModel.ISupportInitialize)(this.LabelResultView)).EndInit();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Label label10;
 
         private System.Windows.Forms.Label label9;
 

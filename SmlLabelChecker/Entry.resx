@@ -3725,4 +3725,10 @@
         AAAAAAAA
 </value>
   </data>
+  <data name="Setting_UrinSettingInfoButton_Click_" xml:space="preserve">
+    <value>이 옵션을 활성화하면 동일한 Urine 검체로 접수된 경우에도,
+요일반 및 요침사 항목(70000, 70004, 70005, 70006, 77560, 77561, 77562, 77563, 70015, 77566),
+기타 Urine 항목,
+Nmp(27541)이 각각 별도로 처리됩니다.</value>
+  </data>
 </root>
