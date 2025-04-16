@@ -66,6 +66,33 @@ namespace SmlLabelChecker
             }
         }
 
+        private bool CheckDuplicateTestCode(SettingData settingData, int hospitalCode, int testCode)
+        {
+            // 모든 병원(HospitalCode == 0)에 대해 동일한 testCode가 이미 존재하는지 확인
+            bool commonExists = settingData.Labels.Exists(data => 
+                data.HospitalCode == 0 && data.TestCode == testCode);
+
+            // 개별 병원에 대해 동일한 testCode가 이미 존재하는지 확인
+            bool specificExists = settingData.Labels.Exists(data => 
+                data.HospitalCode == hospitalCode && data.TestCode == testCode && hospitalCode != 0);
+
+            // 1. 모든 병원에 이미 등록된 경우, 개별 병원 등록 불가
+            if (hospitalCode != 0 && commonExists)
+            {
+                MessageBox.Show("이미 모든 병원에 대해 해당 테스트 코드가 등록되어 있어 개별 병원 설정을 추가할 수 없습니다.");
+                return true;
+            }
+
+            // 2. 동일한 병원에 이미 등록된 경우
+            if (specificExists)
+            {
+                MessageBox.Show("해당 병원에 이미 동일한 테스트 코드가 등록되어 있습니다.");
+                return true;
+            }
+
+            return false;
+        }
+
         private void SaveButton_Click(object sender, EventArgs e)
         {
             try
@@ -79,6 +106,19 @@ namespace SmlLabelChecker
                 if (settingData == null)
                 {
                     settingData = new SettingData { UrineSet = UrineSetting.Checked, Labels = new List<LabelData>() };
+                }
+
+                // 중복 테스트 코드 확인
+                if (CheckDuplicateTestCode(settingData, hospitalCode, testCode))
+                {
+                    return;
+                }
+
+                // 모든 병원(hospitalCode == 0)에 대해 등록 시, 기존 개별 병원 설정 제거
+                if (hospitalCode == 0)
+                {
+                    settingData.Labels.RemoveAll(data => 
+                        data.TestCode == testCode && data.HospitalCode != 0);
                 }
 
                 // 새 항목 추가
@@ -140,7 +180,7 @@ namespace SmlLabelChecker
                     {
                         bool isCommon = data.HospitalCode == 0;
                         string message = isCommon
-                            ? $"모든병원에서는 {data.TestCode}코드의 검사를 진행 시, 라벨을 사용하지 않습니다."
+                            ? $"모든병원에서는 {data.TestCode}코드의 검사를 진행 시, 라벨을 {data.SettingLabel}개를 사용합니다."
                             : $"{data.HospitalCode}병원에서는 {data.TestCode}코드의 검사를 진행 시, 라벨을 {data.SettingLabel}개를 사용합니다.";
 
                         if (isCommon)
